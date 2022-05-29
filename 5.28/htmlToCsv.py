@@ -4,16 +4,20 @@ def readFileContent(fileName):
     return content
 
 
-def readEachLine(content):
-    eachRowStart = content.find("row flip")
+def readEachLine(content, offset):
+    eachRowStart = content.find("row flip", offset)
     # print(content[eachRowStart])
     if eachRowStart == -1:
-        return None
+        return None, offset
 
     eachRowEnd = content.find("Info", eachRowStart) + 4
     # print(content[eachRowEnd])
 
-    return content[eachRowStart:eachRowEnd]
+    return content[eachRowStart:eachRowEnd], eachRowEnd
+
+
+def parseLine(line):
+    pass
 
 
 def main():
@@ -21,11 +25,12 @@ def main():
 
     offset = 0
     while True:
-        line = readEachLine(content)
+        line, offset = readEachLine(content, offset)
         if line == None:
             break
-        print(line)
-        # break
+        # print(line)
+        parseLine(line)
+        break
 
 
 if __name__ == "__main__":
