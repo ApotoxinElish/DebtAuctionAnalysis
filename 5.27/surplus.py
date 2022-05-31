@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 
-tarpath = r"maker.liquidation.surplus.20220403.csv"
+tarpath = r"5.27/maker.liquidation.surplus.20220403.csv"
 
 def read():
         tarFile = pd.read_csv(tarpath)

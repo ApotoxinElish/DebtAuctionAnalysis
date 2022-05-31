@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-tarpath = r"maker.liquidation.2.20220403.csv"
+tarpath = r"5.27/maker.liquidation.2.20220403.csv"
 
 
 def read():
@@ -24,13 +24,20 @@ def dataProcess():
     differ /= np.timedelta64(1, "m")
     differ = differ.rename("differ")
 
-    startTime = auctionStartBlockTime.dt.strftime("%y-%m")
+    startTime = auctionStartBlockTime  # .dt.strftime("%y-%m")
     startTime = startTime.rename("start_time")
 
     differDF = pd.concat([startTime, differ], axis=1)
+
+    differDF = (
+        differDF.resample("W-Mon", on="start_time")
+        .mean()
+        .reset_index()
+        .sort_values(by="start_time")
+    )
     differDF.set_index("start_time", inplace=True)
 
-    differDF = differDF.groupby("start_time").mean()
+    # differDF = differDF.groupby("start_time").mean()
 
     return differDF.sort_index()
 
@@ -40,7 +47,8 @@ def plotDraw():
     print(result)
 
     fig, ax = plt.subplots()
-    ax.bar(result.index, result.differ)
+    ax.bar(result.index, result.differ, 5)
+    # ax.plot(result.index, result.differ)
     ax.set_title("liquidation2 time differ")
     plt.show()
 

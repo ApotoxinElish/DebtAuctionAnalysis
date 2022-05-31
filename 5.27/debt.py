@@ -3,12 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-tarpath = r"maker.liquidation.debt.20220403.csv"
+tarpath = r"5.27/maker.liquidation.debt.20220403.csv"
 
 
 def read():
     tarFile = pd.read_csv(tarpath)
     return tarFile
+
+
+kick_block_number = []
 
 
 def dataProcess():
@@ -19,12 +22,13 @@ def dataProcess():
     kickTime = pd.to_datetime(target.kick_time, format="%Y/%m/%d %H:%M:%S")
     # dentTime = pd.to_datetime(target.dent_time, format="%Y/%m/%d %H:%M:%S")
     dentLot = target.dent_lot
+    kickBlockNumber = target.kick_block_number
 
     lastid = id[0]
     lastindex = 0
     result = []
-    for index in range(len(id)):
-        if id[index] != lastid or index == len(id) - 1:
+    for index in range(len(id) + 1):
+        if index == len(id) or id[index] != lastid:
             # kick_time = kickTime[lastindex].strftime("%Y-%m-%d")
 
             deal_kick = dealTime[index - 1] - kickTime[lastindex]
@@ -39,8 +43,13 @@ def dataProcess():
 
             result.append((lastid, deal_kick, lot_differ, lot_ent))
 
-            lastid = id[index]
-            lastindex = index
+            if index != len(id):
+                kick_block_number.append(
+                    kickBlockNumber[index] - kickBlockNumber[lastindex]
+                )
+
+                lastid = id[index]
+                lastindex = index
 
     resultDataFrame = pd.DataFrame(
         result,
@@ -67,6 +76,11 @@ def plotDraw():
     fig, ax = plt.subplots()
     ax.plot(result.index, result.lot_end)
     ax.set_title("lot_end")
+    plt.show()
+
+    fig, ax = plt.subplots()
+    ax.scatter(np.arange(1, 106), kick_block_number)
+    ax.set_title("kick_block_number")
     plt.show()
 
 
