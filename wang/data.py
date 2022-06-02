@@ -1,19 +1,27 @@
 import pandas as pd
 
 data2014 = pd.read_excel("wang/14-19.xlsx")
-
+data2014 = data2014[~data2014["年份"].isin([2020])]
 data2014["城市"] = data2014["城市"].str.strip()
 # print(type(data2014["城市"][0]))
 
-data2020 = pd.read_excel("wang/2020.xlsx")
+data2020 = pd.read_excel("wang/2020(1).xlsx")
 data2020["城市"] = data2020["城市"].str.strip()
 # print(type(data2020["城市"][0]))
-print(data2020["城市"])
+# print(data2020["城市"])
 
 # print(data2014.head)
 # print(data2020.head)
 
+df_mapping = pd.DataFrame(data2020["城市"])
+sort_mapping = df_mapping.reset_index().set_index("城市")
+print(sort_mapping)
+
 final = pd.concat([data2014, data2020], axis=0)
-final.sort_values(["城市", "年份"], inplace=True)
+
+
+final["size_num"] = final["城市"].map(sort_mapping["index"])
+final.sort_values(["size_num", "年份"], inplace=True)
+final.drop("size_num", axis=1, inplace=True)
 # print(final)
 final.to_excel("wang/data.xlsx", index=False)
