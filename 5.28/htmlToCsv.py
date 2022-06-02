@@ -129,7 +129,7 @@ def main():
     data["ID"] = data["ID"].astype(int)
     data["Time"] = pd.to_datetime(data["Time"], format="%d %b %Y, %H:%M:%S")
     data.sort_values(["ID", "Time", "Type"], inplace=True)
-    data.to_csv("data.csv", index=False)
+    data.to_csv("5.28/flap.csv", index=False)
 
     # data = pd.read_csv("data.csv")
 
