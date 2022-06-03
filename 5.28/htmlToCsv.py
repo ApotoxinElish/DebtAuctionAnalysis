@@ -27,8 +27,8 @@ DataDict = {
     "lot": [],
     "bid": [],
     # "Took Rate": [],
-    "exchange_rate": [],
-    "win_rate": [],
+    "exchange_rate($)": [],
+    "win_rate(%)": [],
     "win_or_lost": [],
     "Rate": [],
     "Price": [],
@@ -71,17 +71,17 @@ def parseLine(line):
     offset = line.find("Took Rate: ", offsetB) + 11
     if offset == 10:
         # DataDict["Took Rate"].append("")
-        DataDict["exchange_rate"].append("")
-        DataDict["win_rate"].append("")
+        DataDict["exchange_rate($)"].append("")
+        DataDict["win_rate(%)"].append("")
         DataDict["win_or_lost"].append("")
         offset = offsetB
     else:
         offsetB = line.find(" dai/mkr", offset)
-        DataDict["exchange_rate"].append(line[offset:offsetB])
+        DataDict["exchange_rate($)"].append(line[offset + 1 : offsetB])
 
         offset = line.find(" (", offsetB) + 2
-        offsetB = line.find(") ", offset)
-        DataDict["win_rate"].append(line[offset:offsetB])
+        offsetB = line.find("%) ", offset)
+        DataDict["win_rate(%)"].append(line[offset:offsetB])
 
         # offsetB = line.find("<b ", offset)
         # tookRate = line[offset:offsetB]
