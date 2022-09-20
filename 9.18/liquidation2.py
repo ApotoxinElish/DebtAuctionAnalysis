@@ -11,9 +11,7 @@ def read():
     return tarFile
 
 
-def dataProcess():
-    target = read()
-
+def dataProcess(target):
     takeBlockTime = pd.to_datetime(target.take_block_time, format="%Y/%m/%d %H:%M:%S")
     auctionStartBlockTime = pd.to_datetime(
         target.auction_start_block_time, format="%Y/%m/%d %H:%M:%S"
@@ -41,10 +39,7 @@ def dataProcess():
     return differDF.sort_index()
 
 
-def plotDraw():
-    result = dataProcess()
-    print(result)
-
+def plotDraw(result):
     fig, ax = plt.subplots()
     ax.bar(result.index, result.differ, 5)
     # ax.plot(result.index, result.differ)
@@ -52,5 +47,12 @@ def plotDraw():
     plt.show()
 
 
+def main():
+    target = read()
+    result = dataProcess(target)
+    print(result)
+    plotDraw(result)
+
+
 if __name__ == "__main__":
-    plotDraw()
+    main()

@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-tarpath = r"5.28/flap.csv"
+tarpath = r"flap.csv"
 
 
 def read():
