@@ -1,7 +1,3 @@
-from asyncio.windows_events import NULL
-from cmath import nan
-from tabnanny import check
-from unittest import result
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,7 +12,7 @@ def read():
 
 
 def calTimeDiff(data):
-    print(data)
+    # print(data)
     tmin = data.tendTime.min()
 
     tmax = data.tendTime.max()
@@ -57,23 +53,28 @@ def dataProcess(target):
 
     tendTime = pd.to_datetime(target.tend_time, format="%Y/%m/%d %H:%M:%S")
     dentTime = pd.to_datetime(target.dent_time, format="%Y/%m/%d %H:%M:%S")
+    yearTime = tendTime.dt.strftime("%Y-%m-%d")
     pureData = {
         "liquidation_id": target.liquidation_id,
         "tendTime": tendTime,
         "dentTime": dentTime,
-        "yearTime": tendTime.dt.year,
+        "yearTime": yearTime,
     }
     pureData = pd.DataFrame(pureData)
     # print(pureData)
     # print(type(pureData.liquidation_id[0]))
 
-    for i in range(1, 4991):
+    result = []
+    ids = set(pureData.liquidation_id.to_list())
+    for i in ids:  # range(1, 4991):
         data = pureData.loc[pureData["liquidation_id"] == i]
         # print(data)
-        result = checkYear(data)
-        print(result)
+        result.extend(checkYear(data))
 
-        return
+    dfTime = pd.DataFrame(result, columns=["start", "duration"])
+    dfTime.start = dfTime.start.dt.strftime("%Y-%m-%d")
+    return dfTime
+    # return
 
     # return
 
@@ -105,28 +106,29 @@ def dataProcess(target):
     # return differDF.sort_index()
 
 
-# def plotDraw(result):
-#     fig, ax = plt.subplots()
-#     ax.bar(result.index, result.deal_differ, 5)
-#     ax.set_title("liquidation1 deal time differ")
-#     plt.show()
+def plotDraw(result):
+    fig, ax = plt.subplots()
+    ax.bar(result.index, result.duration, 1)
+    ax.set_title("liquidation1 deal time differ")
+    plt.show()
 
-#     fig, ax = plt.subplots()
-#     ax.bar(result.index, result.tend_differ, 5)
-#     ax.set_title("liquidation1 tend time differ")
-#     plt.show()
+    # fig, ax = plt.subplots()
+    # ax.bar(result.index, result.tend_differ, 5)
+    # ax.set_title("liquidation1 tend time differ")
+    # plt.show()
 
-#     fig, ax = plt.subplots()
-#     ax.bar(result.index, result.dent_differ, 5)
-#     ax.set_title("liquidation1 dent time differ")
-#     plt.show()
+    # fig, ax = plt.subplots()
+    # ax.bar(result.index, result.dent_differ, 5)
+    # ax.set_title("liquidation1 dent time differ")
+    # plt.show()
 
 
 def main():
     target = read()
     result = dataProcess(target)
-    return
+
     print(result)
+    # return
     plotDraw(result)
 
 

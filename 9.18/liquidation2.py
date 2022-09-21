@@ -21,18 +21,18 @@ def dataProcess(target):
     differ /= np.timedelta64(1, "m")
     differ = differ.rename("differ")
 
-    startTime = auctionStartBlockTime  # .dt.strftime("%y-%m")
-    startTime = startTime.rename("start_time")
+    # startTime = auctionStartBlockTime  # .dt.strftime("%y-%m")
+    # startTime = startTime.rename("start_time")
 
-    differDF = pd.concat([startTime, differ], axis=1)
+    differDF = pd.concat([target.auction_id, differ], axis=1)
 
-    differDF = (
-        differDF.resample("W-Mon", on="start_time")
-        .mean()
-        .reset_index()
-        .sort_values(by="start_time")
-    )
-    differDF.set_index("start_time", inplace=True)
+    # differDF = (
+    #     differDF.resample("W-Mon", on="start_time")
+    #     .mean()
+    #     .reset_index()
+    #     .sort_values(by="start_time")
+    # )
+    differDF.set_index("auction_id", inplace=True)
 
     # differDF = differDF.groupby("start_time").mean()
 
@@ -41,7 +41,7 @@ def dataProcess(target):
 
 def plotDraw(result):
     fig, ax = plt.subplots()
-    ax.bar(result.index, result.differ, 5)
+    ax.bar(result.index, result.differ, 1)
     # ax.plot(result.index, result.differ)
     ax.set_title("liquidation2 time differ")
     plt.show()

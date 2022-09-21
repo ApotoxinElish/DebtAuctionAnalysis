@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-tarpath = r"5.27/maker.liquidation.2.20220403.csv"
+tarpath = r"maker.liquidation.2.20220403.csv"
 
 
 def read():
