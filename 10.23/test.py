@@ -3,8 +3,19 @@ import matplotlib.pyplot as plt
 
 
 def readData():
-    dai_data = pd.read_csv("prices_jp/prices.dai.2021.by_minute.20220221.csv")
-    dai_data.c
+    dai_data = pd.read_csv("prices_jp/prices.dai.2019.by_minute.20220221.csv")
+    dai_data = pd.concat(
+        [dai_data, pd.read_csv("prices_jp/prices.dai.2020.by_minute.20220221.csv")],
+        axis=0,
+    )
+    dai_data = pd.concat(
+        [dai_data, pd.read_csv("prices_jp/prices.dai.2021.by_minute.20220221.csv")],
+        axis=0,
+    )
+    dai_data = pd.concat(
+        [dai_data, pd.read_csv("prices_jp/prices.dai.2022.by_minute.20220221.csv")],
+        axis=0,
+    )
     dai_data.date_time = pd.to_datetime(dai_data.date_time, format="%Y/%m/%d %H:%M:%S")
 
     # print(data.head())
@@ -29,6 +40,7 @@ def readTimeIndex():
     time_series.extend(time_series2)
     time_series = list(set(time_series))
     time_series.sort(reverse=True)
+    # print(time_series)
     return time_series
 
 
@@ -87,10 +99,10 @@ def main():
     for each in time_series:
         characterization(dai_data, each)
 
-    print("\nLeft Mean:", left_mean)
-    print("\nLeft Varance:", left_var)
-    print("\nRight Mean:", right_mean)
-    print("\nRight Varance:", right_var)
+    # print("\nLeft Mean:", left_mean)
+    # print("\nLeft Varance:", left_var)
+    # print("\nRight Mean:", right_mean)
+    # print("\nRight Varance:", right_var)
 
     convert01()
     # list01
