@@ -88,7 +88,23 @@ def convert01():
             elif left_mean[i] - right_mean[i] < 0:
                 list01.append(1)
     print("Rate:", list01.count(1) / len(list01))
-    # return list01
+    return list01
+
+
+def ratio():
+    listMeanRatio = []
+    listVarRatio = []
+    for i in range(len(left_mean)):
+        listMeanRatio.append(((left_mean[i] - right_mean[i]) / left_mean[i]) * 100)
+        listVarRatio.append(((left_var[i] - right_var[i]) / left_var[i]) * 100)
+
+    data = {
+        # "index": [i for i in range(len(left_mean))],
+        "mean_ratio": listMeanRatio,
+        "var_ratio": listVarRatio,
+    }
+    df = pd.DataFrame(data)
+    df.to_csv("new_list.csv", index=False)
 
 
 def main():
@@ -106,6 +122,7 @@ def main():
 
     convert01()
     # list01
+    ratio()
 
 
 if __name__ == "__main__":
