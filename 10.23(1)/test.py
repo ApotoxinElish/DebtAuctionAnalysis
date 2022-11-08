@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import csv
+
 
 def readData():
     dai_data = pd.read_csv("prices_jp/prices.dai.2019.by_minute.20220221.csv")
@@ -91,14 +91,15 @@ def convert01():
     # print("Rate:", list01.count(1) / len(list01))
     # return list01
 
+
 def ratio():
     listMeanRatio = []
     listVarRatio = []
-    for i in range (len(left_mean)):
+    for i in range(len(left_mean)):
         listMeanRatio.append(((left_mean[i] - right_mean[i])))
         listVarRatio.append(((left_var[i] / right_var[i])))
     dataframe = pd.DataFrame({"MeanRatio": listMeanRatio, "VarRatio": listVarRatio})
-    dataframe.to_csv("maker_ratio.csv", index=False, sep=',')
+    dataframe.to_csv("maker_ratio.csv", index=False, sep=",")
 
 
 def show():
@@ -134,6 +135,7 @@ def show():
     plt.show()
     plt.show()
 
+
 def main():
     liquidaiton_1 = 0.27676240208877284
     liquidation_2 = 0.3769309989701339
@@ -154,11 +156,30 @@ def main():
     # ratio()
     # # list01
     # show()
-    a = ["INTRODUCTORY", "PROBABILITY", "INTRODUCTION ",
-        "TO"," DATA"," ANALYTICS" ," DATA"," MINING"," AND"," DATA", "WAREHOUSING",
-        " BIG" ,"DATA", "ANALYTICS", " MACHINE ","LEARNING", "ARTIFICIAL", "INTELLIGENCE"]
+    a = [
+        "INTRODUCTORY",
+        "PROBABILITY",
+        "INTRODUCTION ",
+        "TO",
+        " DATA",
+        " ANALYTICS",
+        " DATA",
+        " MINING",
+        " AND",
+        " DATA",
+        "WAREHOUSING",
+        " BIG",
+        "DATA",
+        "ANALYTICS",
+        " MACHINE ",
+        "LEARNING",
+        "ARTIFICIAL",
+        "INTELLIGENCE",
+    ]
     for s in a:
-        s= s[0].upper() + s[1:].lower()
-        print (s)
+        s = s[0].upper() + s[1:].lower()
+        print(s)
+
+
 if __name__ == "__main__":
     main()
