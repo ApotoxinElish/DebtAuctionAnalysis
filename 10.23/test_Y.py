@@ -34,7 +34,7 @@ def readTimeIndex():
     # print(type(time_series))
     time_series = list(set(time_series))
     time_series.sort(reverse=True)
-
+    print(len(time_series))
     time_series2 = list(set(time_series2))
     time_series2.sort(reverse=True)
 
@@ -42,7 +42,7 @@ def readTimeIndex():
     # time_series = list(set(time_series))
     # time_series.sort(reverse=True)
     # print(time_series)
-    return time_series2
+    return time_series2, len(time_series)
 
 
 left_mean = []
@@ -89,31 +89,42 @@ def convert01():
             elif left_mean[i] - right_mean[i] < 0:
                 list01.append(1)
     # print("Rate:", list01.count(1) / len(list01))
-    # return list01
+    return list01
 
 
-def ratio():
+def ratio(list1):
     listMeanRatio = []
     listVarRatio = []
     for i in range(len(left_mean)):
         listMeanRatio.append(((left_mean[i] - right_mean[i])))
         listVarRatio.append(((left_var[i] / right_var[i])))
-    dataframe = pd.DataFrame({"MeanRatio": listMeanRatio, "VarRatio": listVarRatio})
-    dataframe.to_csv("maker_ratio.csv", index=False, sep=",")
+    dataframe = pd.DataFrame(
+        {"MeanRatio": listMeanRatio, "VarRatio": listVarRatio, "Label": list1}
+    )
+    dataframe.to_csv("ratio.csv", index=False, sep=",")
 
 
-def show():
-    data = pd.read_csv("maker_ratio.csv")
+def show(length):
+    data = pd.read_csv("ratio.csv")
+    data0 = data.loc[data["Label"] == 0]
+    data1 = data.loc[data["Label"] == 1]
     plt.figure()
     plt.scatter(
-        data.index,
-        data.MeanRatio,
-        s=20,
-        edgecolor="black",
-        c="darkorange",
+        data0.index,
+        data0.MeanRatio,
+        s=1,
+        c="b",
         label="ratio",
     )
-    # plt.xlabel("date_time")
+    plt.scatter(
+        data1.index,
+        data1.MeanRatio,
+        s=1,
+        c="r",
+        label="ratio",
+    )
+    plt.axhline(y=0, color="black", linewidth=0.5, linestyle="-")
+    plt.axvline(x=length, color="black", linewidth=0.5, linestyle="-")
     plt.ylabel("Meanratio")
     plt.title("mean_ratio")
     plt.legend()
@@ -121,13 +132,21 @@ def show():
 
     plt.figure()
     plt.scatter(
-        data.index,
-        data.VarRatio,
-        s=20,
-        edgecolor="black",
-        c="darkorange",
+        data0.index,
+        data0.VarRatio,
+        s=1,
+        c="b",
         label="ratio",
     )
+    plt.scatter(
+        data1.index,
+        data1.VarRatio,
+        s=1,
+        c="r",
+        label="ratio",
+    )
+    plt.axhline(y=0, color="black", linewidth=0.5, linestyle="-")
+    plt.axvline(x=length, color="black", linewidth=0.5, linestyle="-")
     # plt.xlabel("date_time")
     plt.ylabel("var_ratio")
     plt.title("var_ratio")
@@ -140,45 +159,20 @@ def main():
     liquidaiton_1 = 0.27676240208877284
     liquidation_2 = 0.3769309989701339
     liquidaiton_1_2 = 0.34859675036927623
-    # dai_data = readData()
-    # time_series = readTimeIndex()
-    # # # print(time_series)
-    # #
-    # for each in time_series:
-    #     characterization(dai_data, each)
+    dai_data = readData()
+    time_series, length = readTimeIndex()
+    print(time_series)
+
+    for each in time_series:
+        characterization(dai_data, each)
 
     # print("\nLeft Mean:", left_mean)
     # print("\nLeft Varance:", left_var)
     # print("\nRight Mean:", right_mean)
     # print("\nRight Varance:", right_var)
-
-    # convert01()
-    # ratio()
-    # # list01
-    # show()
-    a = [
-        "INTRODUCTORY",
-        "PROBABILITY",
-        "INTRODUCTION ",
-        "TO",
-        " DATA",
-        " ANALYTICS",
-        " DATA",
-        " MINING",
-        " AND",
-        " DATA",
-        "WAREHOUSING",
-        " BIG",
-        "DATA",
-        "ANALYTICS",
-        " MACHINE ",
-        "LEARNING",
-        "ARTIFICIAL",
-        "INTELLIGENCE",
-    ]
-    for s in a:
-        s = s[0].upper() + s[1:].lower()
-        print(s)
+    list1 = convert01()
+    ratio(list1)
+    show(length)
 
 
 if __name__ == "__main__":
